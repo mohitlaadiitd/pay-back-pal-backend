@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,6 +24,8 @@ public class UserManagementServiceImpl implements UserManagementService {
     private UserManagementRepository userManagementRepository;
 
     @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     private static final Logger logger = LoggerFactory.getLogger(UserManagementServiceImpl.class);
 
     @Override
@@ -33,9 +36,9 @@ public class UserManagementServiceImpl implements UserManagementService {
     @Override
     public ResponseEntity<String> createUser(CreateUserReq createUserReq) {
         try {
-            UserDetails existingUser = userManagementRepository.findByEmail(createUserReq.getEmail());
+            UserDetails existingUser = userManagementRepository.findByPhoneOrEmail(createUserReq.getPhone(), createUserReq.getEmail());
             if (existingUser != null) {
-                return new ResponseEntity<>("User with email already exists", HttpStatus.CONFLICT);
+                return new ResponseEntity<>("User with email or phone already exists", HttpStatus.CONFLICT);
             }
             if (validateUserReq(createUserReq)) {
                 UserDetails user = getUserDetailObject(createUserReq);
@@ -52,7 +55,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     private boolean validateUserReq(CreateUserReq createUserReq) {
         return createUserReq != null &&
                 StringUtils.isNoneBlank(createUserReq.getFirstName(), createUserReq.getFirstName(), createUserReq.getPhone(),
-                        createUserReq.getEmail());
+                        createUserReq.getEmail(), createUserReq.getPassword());
     }
 
     private UserDetails getUserDetailObject(CreateUserReq createUserReq) {
@@ -61,6 +64,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         user.setLastName(createUserReq.getLastName());
         user.setEmail(createUserReq.getEmail());
         user.setPhone(createUserReq.getPhone());
+        user.setPassword(bCryptPasswordEncoder.encode(createUserReq.getPassword()));
         user.setActive(true);
         user.setCreatedAt(Date.from(Instant.now()));
         user.setUpdatedAt(Date.from(Instant.now()));
