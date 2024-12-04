@@ -1,0 +1,22 @@
+version: '1.0'
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: postgresDB
+      POSTGRES_USER: ${POSTGRES_DB_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
+    ports:
+      - "5433:5432"
+  springboot-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgresDB
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_DB_PASSWORD}
+    env_file:
+      - .env
+    depends_on:
+      - db
