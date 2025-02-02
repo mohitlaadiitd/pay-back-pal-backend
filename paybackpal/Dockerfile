@@ -1,5 +1,5 @@
 # Use a base image that has JDK installed
-FROM openjdk:21-jdk
+FROM gcr.io/distroless/java21
 
 # Set the working directory inside the container
 WORKDIR /app
