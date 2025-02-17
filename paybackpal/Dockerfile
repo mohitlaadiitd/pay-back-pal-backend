@@ -5,7 +5,7 @@ FROM gcr.io/distroless/java21
 WORKDIR /app
 
 # Copy the built jar file from host to container
-COPY target/paybackpal-0.0.1-SNAPSHOT.jar app.jar
+COPY paybackpal/target/paybackpal-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port
 EXPOSE 8080
