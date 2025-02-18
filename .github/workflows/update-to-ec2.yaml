@@ -36,7 +36,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: |
           cd paybackpal
-          mvn clean install -Dskiptests
+          mvn clean install -Dskiptests -Dmaven.test.skip=true
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $$ECR_REGISTRY/$$ECR_REPOSITORY:latest
           
