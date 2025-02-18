@@ -27,6 +27,7 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
+          distribution: 'microsoft'
           java-version: '21'
 
       - name: Build docker image and push to ECR
