@@ -18,7 +18,7 @@ public class UserManagementController {
 
     @GetMapping(path = "/hello")
     public String helloMethod(@RequestParam String name) {
-        return "Hello " + name;
+        return "Hello bro " + name;
     }
 
     @GetMapping(path = "/all")

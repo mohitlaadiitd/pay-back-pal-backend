@@ -65,7 +65,7 @@ jobs:
             docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest
             docker ps -q | xargs -r docker stop
             docker ps -a -q | xargs -r docker rm
-            docker run -d -p 8080:8080 $ECR_REGISTRY/$ECR_REPOSITORY:latest
+            docker run -d --env-file .env -p 8080:8080 $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
 
 
